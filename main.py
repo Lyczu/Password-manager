@@ -35,9 +35,9 @@ def main():
 
         elif choice == "4":
 
-        elif choice == "5"
+        elif choice == "5":
 
-        elif choice == "6"
+        elif choice == "6":
 
         else:
             print("Nieprawidłowa opcja, spróbuj ponownie.")
