@@ -1,4 +1,5 @@
 from cryptography.fernet import Fernet
+from breaches import breach_manager
 
 def load_key():
     key_path = input("Podaj ścieżkę do pliku klucza: ")
@@ -11,12 +12,8 @@ def load_key():
             key_file.write(key)
         return key
 
-KEY = load_key()
 
-print(KEY)
-
-
-def main():  
+def main(key=None):  
     while True:
         print("\nMenedżer haseł:")
         print("1. Dodaj hasło")
@@ -27,17 +24,22 @@ def main():
         print("6. Wyjście")
         choice = input("Wybierz opcję: ")
         
-        if choice == "1":
+        match choice:
+            case "1":
+                pass
+            case "2":
+                pass
+            case "3":
+                pass
+            case "4":
+                pass
+            case "5":
+                breach_manager()
+            case "6":
+                pass
+            case _:
+                print("Nieprawidłowa opcja, spróbuj ponownie.")
 
-        elif choice == "2":
-
-        elif choice == "3":
-
-        elif choice == "4":
-
-        elif choice == "5":
-
-        elif choice == "6":
-
-        else:
-            print("Nieprawidłowa opcja, spróbuj ponownie.")
+if __name__ == "__main__":
+    key = load_key()
+    main(key=key)
