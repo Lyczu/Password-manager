@@ -1,0 +1,2 @@
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : delete_password, status operacji: Hasło usunięte.
