@@ -2,11 +2,6 @@ import hashlib
 import requests
 
 
-
-def get_passwords_from_database() -> list[str]:
-    mock_password = {"google": "test", "motorolla": "asasdasd@$!!LLoosd(())"}
-    return mock_password
-
 def check_password_pwned(password: str) -> int:
     sha1 = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
     prefix, suffix = sha1[:5], sha1[5:]
@@ -24,10 +19,14 @@ def check_password_pwned(password: str) -> int:
             return int(count)
     return 0
 
-def breach_manager():
-    passwords = get_passwords_from_database()
-
-    for site in passwords.keys():
-        num_breaches = check_password_pwned(passwords[site])
-        print(f"Password on {site}, pwned {num_breaches} times")
-    input("Kliknij cokolwiek by wrocic")
+def breach_manager(decrypted_passwords: list[dict]):
+    for entry in decrypted_passwords:
+        service = entry['service']
+        username = entry['username']
+        password = entry['password']
+        num_breaches = check_password_pwned(password)
+        if num_breaches > 0:
+            print(f"!!!! Hasło dla konta '{username}' w serwisie '{service}' wyciekło {num_breaches} razy!!!!")
+        else:
+            print(f"Hasło dla konta '{username}' w serwisie '{service}' jest bezpieczne.")
+    input("Kliknij Enter, by wrócić do menu")

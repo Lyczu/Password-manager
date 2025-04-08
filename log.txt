@@ -1,2 +1,17 @@
 Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
 Użytkownik dodał wykonał operację : delete_password, status operacji: Hasło usunięte.
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : get_password, status operacji: haslo
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : get_password, status operacji: Pobrano hasła.
+Użytkownik dodał wykonał operację : get_password, status operacji: Pobrano hasła.
+Użytkownik dodał wykonał operację : get_password, status operacji: Pobrano hasła.
+Użytkownik dodał wykonał operację : add_password, status operacji: Hasło dodane.
+Użytkownik dodał wykonał operację : check_breaches, status operacji: Sprawdzanie zakończone.
+Użytkownik dodał wykonał operację : check_known_sites, status operacji: To już wszystkie hasła
+Użytkownik dodał wykonał operację : check_breaches, status operacji: Sprawdzanie zakończone.

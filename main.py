@@ -4,6 +4,7 @@ import json
 import getpass
 import os
 from functools import wraps
+from breaches import breach_manager
 
 def load_key():
     key_path = input("Podaj ścieżkę do pliku klucza: ")
@@ -52,21 +53,26 @@ def decrypt_password(encrypted_password):
 def save_passwords(passwords):
     """Zapisuje zaszyfrowane hasła do pliku JSON."""
     with open("passwords.json", "w") as file:
-        json.dump(passwords, file)
+        json.dump(passwords, file, indent=4)
 
 def load_passwords():
     """Ładuje zaszyfrowane hasła z pliku JSON."""
     if os.path.exists("passwords.json"):
         with open("passwords.json", "r") as file:
             return json.load(file)
-    return {}
+    return []
 
 @auth_required
 @log_operation
 def add_password(service, username, password):
     """Dodaje nowe zaszyfrowane hasło do bazy."""
     passwords = load_passwords()
-    passwords[service] = {"username": username, "password": encrypt_password(password)}
+    new_entry = {
+        "service": service,
+        "username": username,
+        "password": encrypt_password(password)
+    }
+    passwords.append(new_entry)
     save_passwords(passwords)
     return "Hasło dodane."
 
@@ -75,20 +81,59 @@ def add_password(service, username, password):
 def get_password(service):
     """Pobiera i deszyfruje hasło dla danej usługi."""
     passwords = load_passwords()
-    if service in passwords:
-        return decrypt_password(passwords[service]["password"])
-    return "Nie znaleziono hasła."
+    matching = []
+    for entry in passwords:
+        if entry["service"] == service:
+            matching.append(entry)
+    if not matching:
+        return "Nie znaleziono hasła."
+    print(f"Znaleziono {len(matching)} wpis(y):")
+    for i, entry in enumerate(matching, 1):
+        print(f"{i}. Login: {entry['username']}, Hasło: {decrypt_password(entry['password'])}")
+    return "Pobrano hasła."
+
 
 @auth_required
 @log_operation
-def delete_password(service):
-    """Usuwa hasło dla danej usługi."""
+def delete_password(service, username):
+    """Usuwa hasło dla danego serwisu i loginu."""
     passwords = load_passwords()
-    if service in passwords:
-        del passwords[service]
-        save_passwords(passwords)
-        return "Hasło usunięte."
-    return "Nie znaleziono hasła."
+    for entry in passwords:
+        if entry["service"] == service and entry["username"] == username:
+            passwords.remove(entry)
+            save_passwords(passwords)
+            return "Wpis został usunięty"
+    return "Nie znaleziono hasła dla podanych danych"
+
+@auth_required
+@log_operation
+def check_known_sites():
+    """"Sprawdzanie serwisów do których mamy zapisane hasło"""
+    password = load_passwords()
+    if password == []:
+        return "Nie masz żadnych haseł"
+    sorted_password = sorted(password, key=lambda x: x['service'])
+    for entry in sorted_password:
+            print(f"Serwis: {entry['service']} Login: {entry['username']}")
+    return "To już wszystkie hasła"
+
+@auth_required
+@log_operation
+def check_breaches():
+    passwords = load_passwords()
+    decrypted_passwords = []
+
+    for entry in passwords:
+        decrypted_entry = {
+            "service": entry["service"],
+            "username": entry["username"],
+            "password": decrypt_password(entry["password"])
+        }
+        decrypted_passwords.append(decrypted_entry)
+
+    breach_manager(decrypted_passwords)
+    return "Sprawdzanie zakończone."
+
 
 def main(key=None):  
     while True:
@@ -108,11 +153,16 @@ def main(key=None):
             print(add_password(service, username, password))
         elif choice == "2":
             service = input("Podaj nazwę usługi: ")
-            print(f"Hasło: {get_password(service)}")
+            print(f"{get_password(service)}")
         elif choice == "3":
             service = input("Podaj nazwę usługi: ")
-            print(delete_password(service))
+            username = input("Podaj login: ")
+            print(delete_password(service, username))
         elif choice == "4":
+            print(check_known_sites())
+        elif choice == "5":
+            check_breaches()
+        elif choice == "6":
             break
         else:
                 print("Nieprawidłowa opcja, spróbuj ponownie.")
